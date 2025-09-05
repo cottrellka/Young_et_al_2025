@@ -10,6 +10,7 @@ library(scales)
 #library(ggbeeswarm)
 library(gmodels)
 library(DESeq2)
+library(R.utils)
 
 #BiocManager::install("DESeq2")
 #BiocManager::install("apeglm")
@@ -55,12 +56,12 @@ library(showtext)
 font_add(family = "Arial", regular = "C:\\WINDOWS\\Fonts\\arial.ttf")
 
 showtext.auto()
-showtext_opts(dpi = 300)
+showtext_opts(dpi = 600, device=cairo_ps)
 
 #Theme Information
 #windowsFonts("Arial Black" = windowsFont("Arial Black"))
 
-theme_science <- function (base_size = 7, base_family = "Arial") 
+theme_science <- function (base_size = 8, base_family = "Arial") 
 {
   theme_bw(base_size = base_size, base_family = base_family) %+replace% 
     theme(panel.border = element_blank(), axis.line = element_line(colour = "black", size=0.3), axis.text = element_text(colour = "black", size = base_size),
@@ -184,18 +185,16 @@ hcc1806_shrink_df$an_rank <- -log10(hcc1806_shrink_df$padj)*hcc1806_shrink_df$lo
 
 ggplot(hcc1806_shrink_df, aes(log2FoldChange, -log10(padj))) + geom_point(size = 0.3) +
   theme_science()  + labs(x = "Log2 Fold Change", y = "-log10 (FDR)", title = "HCC1806\nsgC1 vs sgPACT-2")  +
-  annotate('rect', xmax = 1, xmin = -1, ymax = -log10(min(na.omit(hcc1806_shrink_df$padj))), 
+  annotate('rect', xmax = 1, xmin = -1, ymax = -log10(1E-10), 
            ymin = -log10(0.05), fill = "white", alpha = 0.8) +
-  annotate('rect', xmax = 5, xmin = -5, ymax = -log10(0.05), 
-           ymin = -log10(max(na.omit(hcc1806_shrink_df$padj)))-1, fill = "white", alpha = 0.8) +
   scale_x_continuous(limits = c(-2.5,5), breaks = c(-2.5,0,2.5,5)) + 
   geom_point(data=head(hcc1806_shrink_df[order(-hcc1806_shrink_df$an_rank),],7), aes(log2FoldChange, -log10(padj), color = `Gene.name`), size = 0.6) +
-  geom_text_repel(data=head(hcc1806_shrink_df[order(-hcc1806_shrink_df$an_rank),],7), 
-                  aes(log2FoldChange, -log10(padj), label=`Gene.name`, colour = `Gene.name`), family = 'Arial', size = 2, alpha = 1) +
   scale_colour_manual(values = palette, guide = 'none') + 
   geom_vline(xintercept = -1, linetype="dashed", colour="grey")+ geom_vline(xintercept = 1, linetype="dashed", colour="grey")  +
-  geom_hline(yintercept=-log10(0.05), linetype="dashed", colour="grey")
-ggsave("volcano_hcc1806.tiff", height=2.7, width=1.66, unit="in", dpi = 300)
+  geom_hline(yintercept=-log10(0.05), linetype="dashed", colour="grey") +
+  geom_text_repel(data=head(hcc1806_shrink_df[order(-hcc1806_shrink_df$an_rank),],7), 
+                  aes(log2FoldChange, -log10(padj), label=`Gene.name`, colour = `Gene.name`), family = 'Arial', size = 2.5, alpha = 1)
+ggsave("volcano_hcc1806.eps", height=2.7, width=1.9, unit="in", dpi = 600, device=cairo_ps)
 
 
 #make ranking for GSE
@@ -252,7 +251,7 @@ ggplot(gse_hcc1806_bp, aes(NES, reorder(Description, NES), size = setSize, colou
   labs(x = "Normalized Enrichment Score", colour = "FDR", size = "Gene Count", title = "HCC1806, GO Biological Process") +
   scale_colour_gradientn(colors = met.brewer(name="Veronese", type = "continuous")) + 
   theme(axis.title.y = element_blank())
-ggsave("go_bp_hcc1806.tiff", height = 9, width = 7, units = "in")
+ggsave("go_bp_hcc1806.eps", height = 9, width = 7, unit="in", dpi = 600, device=cairo_ps)
 
 gse_hcc1806_mf <- subset(gse_hcc1806, ONTOLOGY == "MF")
 
@@ -261,7 +260,7 @@ ggplot(gse_hcc1806_mf, aes(NES, reorder(Description, NES), size = setSize, colou
   labs(x = "Normalized Enrichment Score", colour = "FDR", size = "Gene Count", title = "HCC1806, GO Molecular Function") +
   scale_colour_gradientn(colors = met.brewer(name="Veronese", type = "continuous")) + 
   theme(axis.title.y = element_blank())
-ggsave("go_mf_hcc1806.tiff", height = 5, width = 7, units = "in")
+ggsave("go_mf_hcc1806.eps", height = 5, width = 7, unit="in", dpi = 600, device=cairo_ps)
 
 #get hallmark gene sets
 
@@ -293,11 +292,11 @@ dotplot(H_hcc1806, showCategory=20, split=".sign") + facet_grid(.~.sign)
 
 gseaplot2(H_hcc1806, geneSetID = 1, title = paste("HCC1806 ", H_hcc1806$Description[1], "\n Adjusted p-value ", round(H_hcc1806$p.adjust[1], 3), sep = ""),
           subplots = 1:2, base_size = 7) 
-ggsave("gsea_NFKB_HCC1806.tiff", height = 2.5, width = 4, units = "in", dpi = 300)
+ggsave("gsea_NFKB_HCC1806.eps", height = 2.5, width = 4, units = "in", dpi = 600, device=cairo_ps)
 
 gseaplot2(H_hcc1806, geneSetID = 4, title = paste("HCC1806 ", H_hcc1806$Description[4], "\n Adjusted p-value ", round(H_hcc1806$p.adjust[4], 3), sep = ""),
           subplots = 1:2, base_size = 7)  
-ggsave("gsea_ATF4_HCC1806.tiff", height = 2.5, width = 4, units = "in", dpi = 300)
+ggsave("gsea_ATF4_HCC1806.eps", height = 2.5, width = 4, units = "in", dpi = 600, device=cairo_ps)
 
 #make data frame of GSE results
 H_hcc1806_df <- as.data.frame(H_hcc1806@result)
@@ -320,7 +319,7 @@ ggplot(H_hcc1806_df, aes(NES, reorder(Description, NES), size = setSize, colour 
   labs(x = "Normalized Enrichment Score", colour = "FDR", size = "Gene Count") +
   scale_colour_gradientn(colors = met.brewer(name="Veronese", type = "continuous")) + 
   theme(axis.title.y = element_blank())
-ggsave("hallmark_hcc1806.tiff", height = 3, width = 5, units = "in")
+ggsave("hallmark_hcc1806.eps", height = 3, width = 5, unit="in", dpi = 600, device=cairo_ps)
 
 
 
@@ -397,18 +396,16 @@ mb468_shrink_df$an_rank <- -log10(mb468_shrink_df$padj)*mb468_shrink_df$log2Fold
 
 ggplot(mb468_shrink_df, aes(log2FoldChange, -log10(padj))) + geom_point(size = 0.3) +
   theme_science()  + labs(x = "Log2 Fold Change", y = "-log10 (FDR)", title = "MDA-MB-468\nsgNTA vs sgPACT-2")   +
-  annotate('rect', xmax = 1, xmin = -1, ymax = -log10(min(na.omit(mb468_shrink_df$padj))), 
+  annotate('rect', xmax = 1, xmin = -1, ymax = -log10(1E-30), 
            ymin = -log10(0.05), fill = "white", alpha = 0.8) +
-  annotate('rect', xmax = 5, xmin = -5, ymax = -log10(0.05), 
-           ymin = -log10(max(na.omit(mb468_shrink_df$padj)))-1, fill = "white", alpha = 0.8) +
   scale_x_continuous(limits = c(-2.5,5), breaks = c(-2.5,0,2.5,5)) + 
   geom_point(data=head(mb468_shrink_df[order(-mb468_shrink_df$an_rank),],7), aes(log2FoldChange, -log10(padj), color = `Gene.name`), size = 0.6) +
-  geom_text_repel(data=head(mb468_shrink_df[order(-mb468_shrink_df$an_rank),],7), 
-                  aes(log2FoldChange, -log10(padj), label=`Gene.name`, colour = `Gene.name`), family = 'Arial', size = 2, alpha = 1) +
   scale_colour_manual(values = palette, guide = 'none') + 
   geom_vline(xintercept = -1, linetype="dashed", colour="grey")+ geom_vline(xintercept = 1, linetype="dashed", colour="grey")  +
-  geom_hline(yintercept=-log10(0.05), linetype="dashed", colour="grey")
-ggsave("volcano_mb468.tiff", height=2.7, width=1.66, unit="in", dpi = 300)
+  geom_hline(yintercept=-log10(0.05), linetype="dashed", colour="grey") +
+  geom_text_repel(data=head(mb468_shrink_df[order(-mb468_shrink_df$an_rank),],7), 
+                  aes(log2FoldChange, -log10(padj), label=`Gene.name`, colour = `Gene.name`), family = 'Arial', size = 2.5, alpha = 1)
+ggsave("volcano_mb468.eps", height=2.7, width=1.9, unit="in", dpi = 600, device=cairo_ps)
 
 
 # 
@@ -468,7 +465,7 @@ ggplot(gse_mb468_bp, aes(NES, reorder(Description, NES), size = setSize, colour 
   labs(x = "Normalized Enrichment Score", colour = "FDR", size = "Gene Count", title = "MDA-MB-468, GO Biological Process") +
   scale_colour_gradientn(colors = met.brewer(name="Veronese", type = "continuous")) + 
   theme(axis.title.y = element_blank())
-ggsave("go_bp_mb468.tiff", height = 5, width = 7, units = "in")
+ggsave("go_bp_mb468.eps", height = 5, width = 7, unit="in", dpi = 600, device=cairo_ps)
 
 gse_mb468_mf <- subset(gse_mb468, ONTOLOGY == "MF")
 
@@ -477,7 +474,7 @@ ggplot(gse_mb468_mf, aes(NES, reorder(Description, NES), size = setSize, colour 
   labs(x = "Normalized Enrichment Score", colour = "FDR", size = "Gene Count", title = "MDA-MB-468, GO Molecular Function") +
   scale_colour_gradientn(colors = met.brewer(name="Veronese", type = "continuous")) + 
   theme(axis.title.y = element_blank())
-ggsave("go_mf_mb468.tiff", height = 5, width = 7, units = "in")
+ggsave("go_mf_mb468.eps", height = 5, width = 7, unit="in", dpi = 600, device=cairo_ps)
 
 
 set.seed(1)
@@ -489,12 +486,12 @@ dotplot(H_mb468, showCategory=20, split=".sign") + facet_grid(.~.sign)
 
 gseaplot2(H_mb468, geneSetID = 1, title = paste("MDA-MB-468 ", H_mb468$Description[1], "\n Adjusted p-value ", round(H_mb468$p.adjust[1], 3), sep = ""),
           subplots = 1:2, base_size = 7)  
-ggsave("gsea_NFKB_mb468.tiff", height = 2.5, width = 4, units = "in", dpi = 300)
+ggsave("gsea_NFKB_mb468.eps", height = 2.5, width = 4, units = "in", dpi = 600, device=cairo_ps)
 
 
 gseaplot2(H_mb468, geneSetID = 2, title = paste("MDA-MB-468 ", H_mb468$Description[2], "\n Adjusted p-value ", round(H_mb468$p.adjust[2], 3), sep = ""), 
           subplots = 1:2, base_size = 7) 
-ggsave("gsea_ATF4_mb468.tiff", height = 2.5, width = 4, units = "in", dpi = 300)
+ggsave("gsea_ATF4_mb468.eps", height = 2.5, width = 4, units = "in", dpi = 600, device=cairo_ps)
 
 #make data frame of GSE results
 H_mb468_df <- as.data.frame(H_mb468@result)
@@ -516,7 +513,7 @@ ggplot(H_mb468_df, aes(NES, reorder(Description, NES), size = setSize, colour = 
   labs(x = "Normalized Enrichment Score", colour = "FDR", size = "Gene Count") +
   scale_colour_gradientn(colors = met.brewer(name="Veronese", type = "continuous")) + 
   theme(axis.title.y = element_blank())
-ggsave("hallmark_mb468.tiff", height = 3, width = 5, units = "in")
+ggsave("hallmark_mb468.eps", height = 3, width = 5, unit="in", dpi = 600, device=cairo_ps)
 
 #combine GSEA results for mb468 and HCC1806 and make plots
 
@@ -526,14 +523,14 @@ H_hcc1806_df$cell_line = "HCC1806"
 Hallmark_df <- rbind(H_mb468_df, H_hcc1806_df)
 
 ggplot(Hallmark_df, aes(NES, reorder(Description, NES), size = setSize, colour = `p.adjust`)) + 
-  geom_point() + theme_science(base_size = 7) + geom_vline(xintercept = 0, colour = "black", linewidth = 0.3) +
+  geom_point() + theme_science(base_size = 8) + geom_vline(xintercept = 0, colour = "black", linewidth = 0.3) +
   labs(x = "Normalized Enrichment Score", colour = "FDR", size = "Gene Count") +
   scale_colour_gradientn(colors = met.brewer(name="Veronese", type = "continuous")) + 
   theme(axis.title.y = element_blank(), 
         panel.grid.major.y = element_line(color = "grey", size = 0.3), axis.ticks.y = element_line(colour = "grey"), 
         axis.line.y = element_blank()) + 
   facet_grid2(cols = vars(cell_line)) + scale_size_continuous(range = c(0.3, 2)) 
-ggsave("hallmark_mb468_hcc1806.tiff", height = 2.8, width = 4.2, units = "in", dpi = 300)
+ggsave("hallmark_mb468_hcc1806.eps", height = 3, width = 4.6, units = "in", dpi = 600, device=cairo_ps)
 
 #repeat GSEA but keep all gene sets
 
@@ -549,11 +546,11 @@ H_hcc1806_all$p.adjust[28]
 
 gseaplot2(H_hcc1806_all, geneSetID = 28, title = paste("HCC1806 ", H_hcc1806_all$Description[28], "\n Adjusted p-value ", round(H_hcc1806_all$p.adjust[28], 3), sep = ""), 
           subplots = 1:2, base_size = 7) 
-ggsave("gsea_IFNA_HCC1806.tiff", height = 2.5, width = 4, units = "in", dpi = 300)
+ggsave("gsea_IFNA_HCC1806.eps", height = 2.5, width = 4, units = "in", dpi = 600, device=cairo_ps)
 
 gseaplot2(H_mb468_all, geneSetID = 23, title = paste("MDA-MB-468 ", H_mb468_all$Description[23], "\nAdjusted p-value ", round(H_mb468_all$p.adjust[23], 3), sep = ""), 
           subplots = 1:2, base_size = 7) 
-ggsave("gsea_IFNA_mb468.tiff", height = 2.5, width = 4, units = "in", dpi = 300)
+ggsave("gsea_IFNA_mb468.eps", height = 2.5, width = 4, units = "in", dpi = 600, device=cairo_ps)
 
 
 
@@ -675,7 +672,7 @@ p2_isg <- ggplot(vst_all_ISG_long, aes(sgRNA, value)) +
         axis.ticks.x = element_blank()) + facet_wrap(~Cell_line, ncol = 2) 
 
 
-tiff("isg_heatmap_boxplot.tiff", height = 2.8, width = 2.6, units = "in", res = 300)
+postscript("isg_heatmap_boxplot.eps", height = 2.8, width = 2.6)
 plot_grid(p2_isg, p1_isg, nrow = 2, rel_heights = c(2,5), align = "v", axis = "lr") 
 dev.off()
 
@@ -755,7 +752,7 @@ p2_NFKB <- ggplot(vst_all_NFKB_long, aes(sgRNA, value)) +
         axis.ticks.x = element_blank()) + facet_wrap(~Cell_line, ncol = 2) 
 
 
-tiff("NFKB_heatmap_boxplot.tiff", height = 2.8, width = 2.6, units = "in", res = 300)
+postscript("NFKB_heatmap_boxplot.eps", height = 2.8, width = 2.6)
 plot_grid(p2_NFKB, p1_NFKB, nrow = 2, rel_heights = c(2,5), align = "v", axis = "lr") 
 dev.off()
 
@@ -833,6 +830,6 @@ p2_ATF4 <- ggplot(vst_all_ATF4_long, aes(sgRNA, value)) +
         axis.ticks.x = element_blank()) + facet_wrap(~Cell_line, ncol = 2) 
 
 
-tiff("ATF4_heatmap_boxplot.tiff", height = 2.8, width = 2.6, units = "in", res = 300)
+postscript("ATF4_heatmap_boxplot.eps", height = 2.8, width = 2.6)
 plot_grid(p2_ATF4, p1_ATF4, nrow = 2, rel_heights = c(2,5), align = "v", axis = "lr") 
 dev.off()
