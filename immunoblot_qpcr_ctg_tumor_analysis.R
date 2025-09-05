@@ -36,7 +36,7 @@ showtext_opts(dpi = 300)
 #Theme Information
 #windowsFonts("Arial Black" = windowsFont("Arial Black"))
 
-theme_science <- function (base_size = 7, base_family = "Arial") 
+theme_science <- function (base_size = 8, base_family = "Arial") 
 {
   theme_bw(base_size = base_size, base_family = base_family) %+replace% 
     theme(panel.border = element_blank(), axis.line = element_line(colour = "black", size=0.3), axis.text = element_text(colour = "black", size = base_size),
@@ -233,7 +233,7 @@ ggplot(subset(immunoblot_ko, Protein == "pPKR/PKR"), aes(sgRNA, Fold_change, col
   geom_errorbar(data = subset(immunoblot_ko_sum, Protein == "pPKR/PKR"), aes(x = sgRNA, ymax = mean_expression + sd_expression, ymin = mean_expression - sd_expression, y = mean_expression), width=0.2, linewidth = 0.3) + 
   stat_pvalue_manual(data = tnbcppkr, step.increase = 0.1, color = "Cell_line", label = "stars", y.position = "y", label.size = 3, linewidth = 0.3) +
   scale_fill_manual(values = pallete4)
-ggsave("/Manuscripts/PACT/Western_plots/ppkr_ko_facet.tiff", height =2, width = 2.9, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/Western_plots/ppkr_ko_facet.eps", height =2.2, width = 3.2, units = "in", dpi = 600, device=cairo_ps)
 
 
 
@@ -281,7 +281,7 @@ ggplot(immunoblot_ko_effectors, aes(Sample, log2FoldChange, colour = Gene)) +
   geom_errorbar(data = immunoblot_ko_effectors_sum, aes(x = Sample, ymax = mean_expression + sd_expression, ymin = ifelse(mean_expression - sd_expression <0, 0, mean_expression - sd_expression), y = mean_expression), width=0.2, linewidth = 0.3) + 
   stat_pvalue_manual(data = isrnfkb, color = "Gene", label = "stars", y.position = "y", label.size = 3, linewidth = 0.3) +
   scale_fill_manual(values = pallete5) + coord_cartesian(ylim = c(0, 10))
-ggsave("/Manuscripts/PACT/Western_plots/isrnfkb_ko_facet.tiff", height =2, width = 2.6, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/Western_plots/isrnfkb_ko_facet.eps", height =2.1, width = 2.85, units = "in", dpi = 600, , device=cairo_ps)
 
 
 
@@ -326,7 +326,7 @@ ggplot(immunoblot_rescue_pact, aes(Sample, Fold_change)) +
   geom_col(data = immunoblot_rescue_pact_sum, aes(Sample, mean_area), width = 0.5, fill = "white", alpha = 0, colour = "black") + 
   geom_errorbar(data = immunoblot_rescue_pact_sum, aes(x = Sample, ymax = mean_area + sd_area, ymin = mean_area - sd_area, y = mean_area), width=0.2) +
   stat_pvalue_manual(data = rescue_pact_immunoblot, step.increase = 0.1, label = "pval", y.position = "y.position", label.size = 3, linewidth = 0.3)
-ggsave("/Manuscripts/PACT/Western_plots/immunoblot_pact_pact_dunnetEV-PACT2.tiff", height = 2.5, width = 2, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/Western_plots/immunoblot_pact_pact_dunnetEV-PACT2.eps", height = 2.5, width = 2, units = "in", dpi = 600, device=cairo_ps)
 
 
 
@@ -380,7 +380,7 @@ ggplot(immunoblot_rescue_d3, aes(Sample, Fold_change)) +
   geom_col(data = immunoblot_rescue_d3_sum, aes(Sample, mean_area), width = 0.5, fill = "white", alpha = 0, colour = "black") + 
   geom_errorbar(data = immunoblot_rescue_d3_sum, aes(x = Sample, ymax = mean_area + sd_area, ymin = mean_area - sd_area, y = mean_area), width=0.2) +
   stat_pvalue_manual(data = rescue_pact_immunoblot, step.increase = 0.1, label = "pval", y.position = "y.position", label.size = 3, linewidth = 0.3)
-ggsave("/Manuscripts/PACT/Western_plots/immunoblot_pact_d3_dunnetEV-PACT2.tiff", height = 2.5, width = 2, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/Western_plots/immunoblot_pact_d3_dunnetEV-PACT2.eps", height = 2.5, width = 2, units = "in", dpi = 600, device=cairo_ps)
 
 
 ####same as above for GST only control
@@ -422,7 +422,7 @@ ggplot(immunoblot_gst_control, aes(Sample, Fold_Change)) +
   geom_col(data = immunoblot_gst_control_sum, aes(Sample, mean_area), width = 0.5, fill = "white", alpha = 0, colour = "black") + 
   geom_errorbar(data = immunoblot_gst_control_sum, aes(x = Sample, ymax = mean_area + sd_area, ymin = mean_area - sd_area, y = mean_area), width=0.2) +
   stat_pvalue_manual(data = gst_pact_immunoblot, step.increase = 0.1, label = "pval", y.position = "y.position", label.size = 3, linewidth = 0.3)
-ggsave("/Manuscripts/PACT/Western_plots/immunoblot_pact_gst_dunnetEV-PACT2.tiff", height = 2, width = 1.5, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/Western_plots/immunoblot_pact_gst_dunnetEV-PACT2.eps", height = 2, width = 1.5, units = "in", dpi = 600, device=cairo_ps)
 
 
 
@@ -446,7 +446,7 @@ ggplot(immunoblot_baseline, aes(Cell_line, Fold_Change, colour = Protein)) +
   scale_fill_manual(values = pallete4) +
   geom_col(data = immunoblot_baseline_sum, aes(Cell_line, mean_area, colour = Protein, fill = Protein), width = 0.5, alpha = 0.3) + 
   geom_errorbar(data = immunoblot_baseline_sum, aes(x = Cell_line, ymax = mean_area + sd_area, ymin = mean_area - sd_area, y = mean_area, colour = Protein), width=0.2) 
-ggsave("/Manuscripts/PACT/Western_plots/immunoblot_baseline.tiff", height = 2.2, width = 4, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/Western_plots/immunoblot_baseline.eps", height = 2.2, width = 4, units = "in", dpi = 600, device=cairo_ps)
 
 
 
@@ -493,7 +493,7 @@ ggplot(immunoblot_rescue_adar, aes(Sample, Fold_change)) +
   geom_col(data = immunoblot_rescue_adar_sum, aes(Sample, mean_area), width = 0.5, fill = "white", alpha = 0, colour = "black") + 
   geom_errorbar(data = immunoblot_rescue_adar_sum, aes(x = Sample, ymax = mean_area + sd_area, ymin = mean_area - sd_area, y = mean_area), width=0.2) +
 stat_pvalue_manual(data = rescue_adar_immunoblot, step.increase = 0.1, label = "pval", y.position = "y.position", label.size = 3, linewidth = 0.3)
-ggsave("/Manuscripts/PACT/Western_plots/rescue_pact_adar_dunnetEV-PACT2.tiff", height = 2.5, width = 1.8, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/Western_plots/rescue_pact_adar_dunnetEV-PACT2.eps", height = 2.5, width = 1.8, units = "in", dpi = 600, device=cairo_ps)
 
 
 
@@ -612,7 +612,7 @@ ggplot(ctg_ko, aes(sgRNA, Fold_change, colour = Cell_line)) +
   geom_errorbar(data = ctg_ko_sum, aes(x = sgRNA, ymax = mean_area + sd_area, ymin = mean_area - sd_area, y = mean_area), width=0.2, linewidth = 0.3) +
   stat_pvalue_manual(data = tnbcctg, step.increase = 0.1, step.group.by = "Cell_line", color = "Cell_line", label = "stars", y.position = "y", label.size = 3, linewidth = 0.3) +
   scale_fill_manual(values = pallete4)
-ggsave("/Manuscripts/PACT/CTG_plots/ctg_ko_facet.tiff", height =2, width = 2.9, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/CTG_plots/ctg_ko_facet.eps", height =2.2, width = 3.4, units = "in", dpi = 600, device=cairo_ps)
 
 
 
@@ -694,7 +694,7 @@ p <- ggplot(ctg_dko, aes(sgRNA, Fold_change, colour = shRNA)) +
   scale_colour_manual(values = palette2, labels = c("shSCR", "shADAR1")) + 
   scale_fill_manual(values = palette2, labels = c("shSCR", "shADAR1"))
 move_layers(p, "GeomPoint", position = "top")
-ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_adar_dko_facet_all.tiff", height = 2.1, width = 2.6, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_adar_dko_facet_all.eps", height = 2.1, width = 2.6, units = "in", dpi = 600, device=cairo_ps)
 
 #remove comparisons between the two control sgRNAs or the two PACT sgRNAs to make the plot less cluttered 
 
@@ -716,7 +716,7 @@ p <- ggplot(ctg_dko, aes(sgRNA, Fold_change, colour = shRNA)) +
   scale_colour_manual(values = palette2, labels = c("shSCR", "shADAR1")) + 
   scale_fill_manual(values = palette2, labels = c("shSCR", "shADAR1"))
 move_layers(p, "GeomPoint", position = "top")
-ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_adar_dko_facet.tiff", height = 2.1, width = 2.6, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_adar_dko_facet.eps", height = 2.2, width = 2.8, units = "in", dpi = 600, device=cairo_ps)
 
 
 ####CTG PKR PACT dko ----
@@ -761,7 +761,7 @@ ggplot(ctg_dko_pkr, aes(Sample, Fold_change)) +
   geom_col(data = ctg_dko_pkr_sum, aes(Sample, mean_area), width = 0.5, fill = "white", alpha = 0, colour = "black") + 
   geom_errorbar(data = ctg_dko_pkr_sum, aes(x = Sample, ymax = mean_area + sd_area, ymin = mean_area - sd_area, y = mean_area), width=0.2) +
   stat_pvalue_manual(data = pkr_pact_ctg, step.increase = 0.1, label = "pval", y.position = "y.position", label.size = 3, linewidth = 0.3)
-ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_pkr_dko_dunnet.tiff", height = 2.4, width = 1.5, units = "in")
+ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_pkr_dko_dunnet.eps", height = 2.4, width = 1.5, units = "in", , dpi = 600, device=cairo_ps)
 
 
 #########CTG rescue ----
@@ -812,7 +812,7 @@ ggplot(ctg_rescue_pact, aes(Sample, Fold_change)) +
   geom_col(data = ctg_rescue_pact_sum, aes(Sample, mean_area), width = 0.5, fill = "white", alpha = 0, colour = "black") + 
   geom_errorbar(data = ctg_rescue_pact_sum, aes(x = Sample, ymax = mean_area + sd_area, ymin = mean_area - sd_area, y = mean_area), width=0.2) +
   stat_pvalue_manual(data = rescue_pact_ctg, step.increase = 0.1, label = "pval", y.position = "y.position", label.size = 3, linewidth = 0.3)
-ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_pact_dunnetEV-PACT2.tiff", height = 2.5, width = 2, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_pact_dunnetEV-PACT2.eps", height = 2.5, width = 2, units = "in", dpi = 600, device=cairo_ps)
 
 rescue_pact_ctg <- NULL
 
@@ -855,7 +855,7 @@ ggplot(ctg_rescue_d3, aes(Sample, Fold_change)) +
   geom_col(data = ctg_rescue_d3_sum, aes(Sample, mean_area), width = 0.5, fill = "white", alpha = 0, colour = "black") + 
   geom_errorbar(data = ctg_rescue_d3_sum, aes(x = Sample, ymax = mean_area + sd_area, ymin = mean_area - sd_area, y = mean_area), width=0.2) +
   stat_pvalue_manual(data = rescue_pact_ctg, step.increase = 0.1, label = "pval", y.position = "y.position", label.size = 3, linewidth = 0.3)
-ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_d3_dunnetEV-PACT2.tiff", height = 2.5, width = 2, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_d3_dunnetEV-PACT2.eps", height = 2.5, width = 2, units = "in", dpi = 600, device=cairo_ps)
 
 rescue_pact_ctg <- NULL
 
@@ -894,7 +894,7 @@ ggplot(ctg_rescue_adar, aes(Sample, Fold_change)) +
   geom_col(data = ctg_rescue_adar_sum, aes(Sample, mean_area), width = 0.5, fill = "white", alpha = 0, colour = "black") + 
   geom_errorbar(data = ctg_rescue_adar_sum, aes(x = Sample, ymax = mean_area + sd_area, ymin = mean_area - sd_area, y = mean_area), width=0.2) +
   stat_pvalue_manual(data = rescue_adar_ctg, step.increase = 0.1, label = "pval", y.position = "y.position", label.size = 3, linewidth = 0.3)
-ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_ADAR_dunnetEV-PACT2.tiff", height = 2.5, width = 1.8, units = "in")
+ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_ADAR_dunnetEV-PACT2.eps", height = 2.5, width = 1.8, units = "in", dpi = 600, device=cairo_ps)
 
 
 
@@ -933,7 +933,7 @@ ggplot(ctg_gst_control, aes(Sample, Fold_change)) +
   geom_col(data = ctg_gst_control_sum, aes(Sample, mean_area), width = 0.5, fill = "white", alpha = 0, colour = "black") + 
   geom_errorbar(data = ctg_gst_control_sum, aes(x = Sample, ymax = mean_area + sd_area, ymin = mean_area - sd_area, y = mean_area), width=0.2) +
   stat_pvalue_manual(data = rescue_pact_ctg, step.increase = 0.1, label = "pval", y.position = "y.position", label.size = 3, linewidth = 0.3)
-ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_dunnetEV-PACT2.tiff", height = 2, width = 1.5, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/CTG_plots/ctg_pact_dunnetEV-PACT2.eps", height = 2, width = 1.5, units = "in", dpi = 600, device=cairo_ps)
 
 rescue_pact_ctg <- NULL
 
@@ -1015,7 +1015,7 @@ p <- ggplot(subset(immunoblot_dko, Protein == "pPKR/PKR"), aes(Sample, Fold_chan
   scale_colour_manual(values = palette2, labels = c("shSCR", "shADAR1")) + 
   scale_fill_manual(values = palette2, labels = c("shSCR", "shADAR1"))
 move_layers(p, "GeomPoint", position = "top")
-ggsave("/Manuscripts/PACT/Western_plots/ppkr_pact_adar_dko_facet_all.tiff", height = 2.1, width = 2.6, units = "in")
+ggsave("/Manuscripts/PACT/Western_plots/ppkr_pact_adar_dko_facet_all.eps", height = 2.1, width = 2.6, units = "in")
 
 #remove comparisons between the two control sgRNAs or the two PACT sgRNAs to make the plot less cluttered 
 
@@ -1037,7 +1037,7 @@ p <- ggplot(subset(immunoblot_dko, Protein == "pPKR/PKR"), aes(Sample, Fold_chan
   scale_colour_manual(values = palette2, labels = c("shSCR", "shADAR1")) + 
   scale_fill_manual(values = palette2, labels = c("shSCR", "shADAR1"))
 move_layers(p, "GeomPoint", position = "top")
-ggsave("/Manuscripts/PACT/Western_plots/ppkr_pact_adar_dko_facet.tiff", height = 2.1, width = 2.6, units = "in")
+ggsave("/Manuscripts/PACT/Western_plots/ppkr_pact_adar_dko_facet.eps", height = 2.2, width = 2.8, units = "in", dpi = 600, device=cairo_ps)
 
 
 ####Immunoblot PACT overexpression ----
@@ -1154,7 +1154,7 @@ ggplot(subset(immunoblot_oe, Protein == "pPKR"), aes(Sample, Fold_change, colour
   geom_col(data = subset(immunoblot_oe_sum, Protein == "pPKR"), aes(Sample, mean_expression, fill = Cell_line), width = 0.5, alpha = 0.2, linewidth = 0.3) +
   geom_errorbar(data = subset(immunoblot_oe_sum, Protein == "pPKR"), aes(x = Sample, ymax = mean_expression + sd_expression, ymin = mean_expression - sd_expression, y = mean_expression), width=0.2, linewidth = 0.3) + 
   scale_fill_manual(values = pallete4)
-ggsave("/Manuscripts/PACT/Western_plots/ppkr_oe_facet.tiff", height =2, width = 2.9, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/Western_plots/ppkr_oe_facet.eps", height =2.2, width = 3.2, units = "in", dpi = 600, device=cairo_ps)
 
 
 
@@ -1290,7 +1290,7 @@ ggplot(subset(qPCR_ko, Gene %in% c("ATF3", "ASNS", "SESN2")), aes(Sample, Fold_C
                 position = position_dodge(width = 0.7)) +
   stat_pvalue_manual(data = atf4_ko, label = "stars", y.position = "y", step.increase = 0.07, step.group.by = "Cell_line", label.size = 2.5, linewidth = 0.3, tip.length = 0.01) +
   geom_bracket(data = brackets, aes(xmin = x, xmax = x_end, y.position = y, label = ""), colour = "black") 
-ggsave("/Manuscripts/PACT/qPCR_plots/pact_ko_atf4.tiff", height =2.2, width = 3.3, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/qPCR_plots/pact_ko_atf4.eps", height =2.3, width = 3.5, units = "in", dpi = 600, device=cairo_ps)
 
 #remove bracket annotation data.frames
 
@@ -1408,7 +1408,7 @@ ggplot(subset(qPCR_ko, Gene %in% c("PARP14", "IFIT2", "IFIH1")), aes(Sample, Fol
                 position = position_dodge(width = 0.7)) +
   stat_pvalue_manual(data = isg_ko, label = "stars", step.increase = 0.07, , step.group.by = "Cell_line", y.position = "y", label.size = 2.5, linewidth = 0.3, tip.length = 0.01) +
   geom_bracket(data = brackets, aes(xmin = x, xmax = x_end, y.position = y, label = ""), colour = "black") 
-ggsave("/Manuscripts/PACT/qPCR_plots/pact_ko_isg.tiff", height =2.2, width = 3.3, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/qPCR_plots/pact_ko_isg.eps", height =2.3, width = 3.5, units = "in", dpi = 600, device=cairo_ps)
 
 
 bracket_468 <- NULL
@@ -1525,7 +1525,7 @@ ggplot(subset(qPCR_ko, Gene %in% c("NFKBIE", "IRF1", "BIRC3")), aes(Sample, Fold
                 position = position_dodge(width = 0.7)) +
   stat_pvalue_manual(data = nfkb_ko, label = "stars", step.increase = 0.07, step.group.by = "Cell_line", y.position = "y", label.size = 2.5, linewidth = 0.3, tip.length = 0.01) +
   geom_bracket(data = brackets, aes(xmin = x, xmax = x_end, y.position = y, label = ""), colour = "black") 
-ggsave("/Manuscripts/PACT/qPCR_plots/pact_ko_nfkb.tiff", height =2.2, width = 3.3, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/qPCR_plots/pact_ko_nfkb.eps", height =2.3, width = 3.5, units = "in", dpi = 600, device=cairo_ps)
 
 bracket_468 <- NULL
 bracket_1806 <- NULL
@@ -1596,7 +1596,7 @@ ggplot(subset(qPCR_dko_pact_adar, Gene %in% c("ATF3", "ASNS", "SESN2")), aes(sgR
                 aes(x = sgRNA, colour = Gene, ymax = mean_expression + sd_expression, 
                     ymin = mean_expression - sd_expression, y = mean_expression), width=0.2, linewidth = 0.3,
                 position = position_dodge(width = 0.7)) 
-ggsave("/Manuscripts/PACT/qPCR_plots/pact_adar_dko_453_atf4.tiff", height =1.8, width = 2.6, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/qPCR_plots/pact_adar_dko_453_atf4.eps", height =2, width = 2.8, units = "in", dpi = 600, device=cairo_ps)
 
 
 brackets <- data.frame(x =  c(0.6,1.6,2.6,3.6,4.6, 5.6, 6.6, 7.6), 
@@ -1632,7 +1632,7 @@ ggplot(subset(qPCR_dko_pact_adar, Gene %in% c("ATF3", "ASNS", "SESN2")), aes(Sam
   annotate("text", x = 2.5, y = 60, colour = "black", label = "shSCR", size = 3) + 
   annotate("text", x = 6.5, y = 60, colour = "black", label = "shADAR", size = 3) +
   geom_bracket(data = brackets, aes(xmin = x, xmax = x_end, y.position = y, label = ""), colour = "black") 
-ggsave("/Manuscripts/PACT/qPCR_plots/pact_adar_dko_453_atf4_stats.tiff", height =2.2, width = 2.5, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/qPCR_plots/pact_adar_dko_453_atf4_stats.eps", height =2.2, width = 2.5, units = "in", dpi = 600, device=cairo_ps)
 
 isg_453 <- aov(Fold_Change ~ Sample, , data = subset(qPCR_dko_pact_adar, Gene %in% c("IFIT2", "IFIH1", "PARP14")))
 summary(isg_453)
@@ -1672,7 +1672,7 @@ ggplot(subset(qPCR_dko_pact_adar, Gene %in% c("IFIT2", "IFIH1", "PARP14")), aes(
                 aes(x = sgRNA, colour = Gene, ymax = mean_expression + sd_expression, 
                     ymin = mean_expression - sd_expression, y = mean_expression), width=0.2, linewidth = 0.3,
                 position = position_dodge(width = 0.7)) 
-ggsave("/Manuscripts/PACT/qPCR_plots/pact_adar_dko_453_isg.tiff", height =1.8, width = 2.6, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/qPCR_plots/pact_adar_dko_453_isg.eps", height =1.8, width = 2.6, units = "in", dpi = 600, device=cairo_ps)
 
 
 
@@ -1710,7 +1710,7 @@ ggplot(subset(qPCR_dko_pact_adar, Gene %in% c("IFIT2", "IFIH1", "PARP14")), aes(
   annotate("text", x = 2.5, y = 8, colour = "black", label = "shSCR", size = 3) + 
   annotate("text", x = 6.5, y = 8, colour = "black", label = "shADAR", size = 3) +
   geom_bracket(data = brackets, aes(xmin = x, xmax = x_end, y.position = y, label = ""), colour = "black")
-ggsave("/Manuscripts/PACT/qPCR_plots/pact_adar_dko_453_isg_stats.tiff", height =2.2, width = 2.5, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/qPCR_plots/pact_adar_dko_453_isg_stats.eps", height =2.2, width = 2.5, units = "in", dpi = 600, device=cairo_ps)
 
 nfkb_453 <- aov(Fold_Change ~ Sample, , data = subset(qPCR_dko_pact_adar, Gene %in% c("NFKBIE", "IRF1", "BIRC3")))
 summary(nfkb_453)
@@ -1750,7 +1750,7 @@ ggplot(subset(qPCR_dko_pact_adar, Gene %in% c("NFKBIE", "IRF1", "BIRC3")), aes(s
                 aes(x = sgRNA, colour = Gene, ymax = mean_expression + sd_expression, 
                     ymin = mean_expression - sd_expression, y = mean_expression), width=0.2, linewidth = 0.3,
                 position = position_dodge(width = 0.7)) 
-ggsave("/Manuscripts/PACT/qPCR_plots/pact_adar_dko_453_nfkb.tiff", height =1.8, width = 2.6, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/qPCR_plots/pact_adar_dko_453_nfkb.eps", height =2, width = 2.8, units = "in", dpi = 600, device=cairo_ps)
 
 
 brackets <- data.frame(x =  c(0.6,1.6,2.6,3.6,4.6, 5.6, 6.6, 7.6), 
@@ -1787,7 +1787,7 @@ ggplot(subset(qPCR_dko_pact_adar, Gene %in% c("NFKBIE", "IRF1", "BIRC3")), aes(S
   annotate("text", x = 2.5, y = 4.4, colour = "black", label = "shSCR", size = 3) + 
   annotate("text", x = 6.5, y = 4.4, colour = "black", label = "shADAR", size = 3) +
   geom_bracket(data = brackets, aes(xmin = x, xmax = x_end, y.position = y, label = ""), colour = "black")
-ggsave("/Manuscripts/PACT/qPCR_plots/pact_adar_dko_453_nfkb_stats.tiff", height =2.2, width = 2.5, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/qPCR_plots/pact_adar_dko_453_nfkb_stats.eps", height =2.2, width = 2.5, units = "in", dpi = 600, device=cairo_ps)
 
 
 #qPCR PKR-PACT dko ----
@@ -1876,7 +1876,7 @@ ggplot(qpcr_pkr_pact_dko, aes(Sample, Fold_Change, colour = Gene, group = Gene))
                 position = position_dodge(width = 0.7)) +
   stat_pvalue_manual(data = pkr_pact_qpcr_p, label = "pval", step.increase = 0.07, , step.group.by = "pathway", y.position = "y", label.size = 2.5, linewidth = 0.3, tip.length = 0.01) +
   geom_bracket(data = brackets, aes(xmin = x, xmax = x_end, y.position = y, label = ""), colour = "black") 
-ggsave("/Manuscripts/PACT/qPCR_plots/pact_pkr_dko.tiff", height =2.5, width = 3, units = "in", dpi = 300)
+ggsave("/Manuscripts/PACT/qPCR_plots/pact_pkr_dko.eps", height =2.7, width = 3.3, units = "in", dpi = 600, device=cairo_ps)
 
 
 
@@ -1908,15 +1908,15 @@ p1 <- ggplot(tumor, aes(Day, Volume, colour = as.factor(Mouse), group = as.facto
   geom_line(data = tumor_sum, aes(Day, mean_volume, colour = Mouse), linewidth = 0.6) + 
   geom_pointrange(data = tumor_sum, aes(Day, mean_volume, ymax = mean_volume + sd_volume, ymin = mean_volume - sd_volume), size = 0.3) + 
   labs(y = "Tumor Volume (mm^3)", x = "Days post injection", colour = "") +
-  geom_label(aes(x = 5, y = 750), label = "Doxycycline initiated", angle = 90, colour = "black", size = 2)
+  geom_label(aes(x = 5, y = 750), label = "Doxycycline initiated", angle = 90, colour = "black", size = 3)
 p1
-ggsave("tumorigenesis.tiff", height = 3, width = 2.5, units = "in", dpi = 300)
+ggsave("tumorigenesis.eps", height = 3, width = 2.5, units = "in", dpi = 600, device=cairo_ps)
 
 ggplot(tumor, aes(Day, Volume, colour = as.factor(Mouse), group = as.factor(Mouse))) + 
   geom_line(alpha = 0.7, linewidth = 0.3) + geom_point(alpha = 0.7, size = 0.3) +
   scale_colour_manual(values =palette_t) + theme_science() +
   labs(y = "Tumor Volume (mm^3)", x = "Days post injection", colour = "") + theme(legend.position = "bottom")
-ggsave("tumorigenesis_nosum.tiff", height = 3, width = 2.5, units = "in", dpi = 300)
+ggsave("tumorigenesis_nosum.eps", height = 3, width = 2.5, units = "in", dpi = 600, device=cairo_ps)
 
 #make data.frame for final day measurements
 
@@ -1937,13 +1937,13 @@ p2 <- ggplot(tumor_sub, aes(sgRNA, Volume, colour = sgRNA)) +
   scale_colour_manual(values = c(palette[5], palette[2])) + scale_fill_manual(values = c(palette[5], palette[2])) +
   geom_bracket(xmin = "sgNTA", xmax = "sgPACT-2", y.position = 1250, 
                label = round(t.test(Volume ~ sgRNA, data = tumor_sub)$p.value, 4), colour = "black",
-               label.size = 2) 
+               label.size = 3) 
 p2 
-ggsave("tumor_endpoint.tiff", height =2, width = 2.9, units = "in", dpi = 300)
+ggsave("tumor_endpoint.eps", height =2, width = 2.9, units = "in", dpi = 600, device=cairo_ps)
 
-prow <- p1 + p2 + plot_layout(widths = c(0.8, 0.35), guides = "collect") & theme_science(base_size = 7)
+prow <- p1 + p2 + plot_layout(widths = c(0.8, 0.43), guides = "collect") & theme_science(base_size = 8)
 prow
 
-ggsave("tumor.tiff", height = 2, width = 4.7, units = "in", dpi = 300)
-ggsave("tumor.pdf", height = 2, width = 4.7, units = "in", dpi = 300)
+ggsave("tumor.eps", height = 2.2, width = 4.9, units = "in", dpi = 600, device=cairo_ps)
+ggsave("tumor.pdf", height = 2, width = 4.7, units = "in", dpi = 600, device=cairo_ps)
 
